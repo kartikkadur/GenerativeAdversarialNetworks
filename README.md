@@ -15,4 +15,4 @@ Checkout ```python train.py --help``` for all possible options.
 Currently validation code is under development.
 
 ## Generated Cifar10 images after 100 epochs
-![DCGAN](https://github.com/kartikkadur/GenerativeAdvesarialNetworks/blob/main/DCGAN.PNG)
+![DCGAN](https://raw.githubusercontent.com/kartikkadur/GenerativeAdversarialNetworks/main/DCGAN.png)
