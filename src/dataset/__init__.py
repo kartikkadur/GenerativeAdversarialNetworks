@@ -1,1 +1,2 @@
-from .cifar10 import Cifar10
+from . import cifar10
+from . import weather5

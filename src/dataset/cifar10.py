@@ -1,21 +1,36 @@
 import os
 import pickle
+import torch
 
 import torchvision.transforms as transforms
 import numpy as np
 from torch.utils.data import Dataset
 
+def get_dataset(args, is_training=False):
+    return Cifar10(args.root,
+                    transforms=None,
+                    is_training=is_training)
+
+def get_dataloader(args, is_training=False):
+    dataset = get_dataset(args, is_training)
+    dataloader = torch.utils.data.DataLoader(dataset, 
+                                            batch_size=args.batch_size,
+                                            num_workers=args.num_workers,
+                                            drop_last=True,
+                                            shuffle=True)
+    return dataloader
+
 class Cifar10(Dataset):
-    def __init__(self, root, transforms=None, mode='train'):
-        self.mode = mode
+    def __init__(self, root, transforms=None, is_training=False):
+        self.is_training = is_training
         self.transforms = transforms
-        self.images, self.labels = self.get_cifar_data(root, mode)
+        self.images, self.labels = self.get_cifar_data(root)
         self.classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
     
-    def get_cifar_data(self, root, mode):
+    def get_cifar_data(self, root):
         images, labels = [], []
-        if 'train' in mode:
+        if self.is_training:
             filename = "data_batch"
         else:
             filename = "test_batch"
@@ -40,7 +55,7 @@ class Cifar10(Dataset):
         image = self.images[index]
         label = self.labels[index]
         # if training apply transforms
-        if 'train' in self.mode:
+        if self.is_training:
             if self.transforms is None:
                 self.transforms = transforms.Compose([transforms.ToTensor(),
                                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
